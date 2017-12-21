@@ -14,206 +14,44 @@ ReviewIntent tell me the review on {Book}
 ReviewIntent tell me about {Book}
 ReviewIntent the review of {Book}
 ReviewIntent review {Book}
+ReviewIntent get review about {Book} by {Author}
+ReviewIntent get review of {Book} by {Author}
+ReviewIntent get review on {Book} by {Author}
+ReviewIntent get {Book} by {Author} review
+ReviewIntent give me the {Book} by {Author} review
+ReviewIntent tell me the {Book} by {Author} review
+ReviewIntent the {Book} by {Author} review
+ReviewIntent give me the review of {Book} by {Author}
+ReviewIntent tell me the review of {Book} by {Author}
+ReviewIntent give me the review on {Book} by {Author}
+ReviewIntent tell me the review on {Book} by {Author}
+ReviewIntent tell me about {Book} by {Author}
+ReviewIntent the review of {Book} by {Author}
+ReviewIntent review {Book} by {Author}
 
-AgeRatingIntent what is the age rating for {Book}
-AgeRatingIntent what's the age rating for {Book}
-AgeRatingIntent give me the age rating for {Book}
-AgeRatingIntent tell me the age rating for {Book}
-AgeRatingIntent the age rating for {Book}
-AgeRatingIntent age rating for {Book}
-AgeRatingIntent {Book} age rating
-AgeRatingIntent what is the age rating
-AgeRatingIntent what's the age rating
-AgeRatingIntent give me the age rating
-AgeRatingIntent tell me the age rating
-AgeRatingIntent the age rating
-AgeRatingIntent age rating
-
-StarsIntent what is the star rating for {Book}
-StarsIntent what's the star rating for {Book}
-StarsIntent the star rating for {Book}
-StarsIntent the {Book} star rating
-StarsIntent give me the {Book} star rating
-StarsIntent tell me the {Book} star rating
-StarsIntent {Book} star rating
-StarsIntent how many stars
-StarsIntent what is the star rating
-StarsIntent what's the star rating
-StarsIntent give me the star rating
-StarsIntent tell me the star rating
-StarsIntent the star rating
-StarsIntent star rating
-
-GoodIntent is {Book} any good
-GoodIntent tell me is {Book} good
-GoodIntent is {Book} good
-GoodIntent tell me if {Book} is any good
-GoodIntent if {Book} is any good
-GoodIntent if {Book} any good
-GoodIntent tell me if {Book} is good
-GoodIntent tell me if good
-GoodIntent if {Book} is good
-GoodIntent if {Book} good
-GoodIntent is good
-
-PointsIntent what are the talking points for {Book}
-PointsIntent the talking points for {Book}
-PointsIntent the {Book} talking points
-PointsIntent {Book} talking points
-PointsIntent talking points on {Book}
-PointsIntent the talking points on {Book}
-PointsIntent what are the talking points
-PointsIntent what are talking points
-PointsIntent give me the talking points
-PointsIntent tell me the talking points
-PointsIntent the talking points
-PointsIntent talking points
-
-DetailsIntent what are the details for {Book}
-DetailsIntent what are the details on {Book}
-DetailsIntent give me the details for {Book}
-DetailsIntent give me details for {Book}
-DetailsIntent tell me the details for {Book}
-DetailsIntent tell me details for {Book}
-DetailsIntent details for {Book}
-DetailsIntent give me the details on {Book}
-DetailsIntent tell me the details on {Book}
-DetailsIntent give me details on {Book}
-DetailsIntent tell me details on {Book}
-DetailsIntent details on {Book}
-DetailsIntent the details for {Book}
-DetailsIntent the details on {Book}
-DetailsIntent the {Book} details
-DetailsIntent {Book} details
-DetailsIntent what are the details
-DetailsIntent give me the details
-DetailsIntent tell me the details
-DetailsIntent the details
-DetailsIntent details
-
-ReleaseIntent when is {Book} released
-ReleaseIntent has {Book} been released
-ReleaseIntent has {Book} released
-ReleaseIntent when will {Book} be released
-ReleaseIntent when was {Book} released
-ReleaseIntent will {Book} be released
-ReleaseIntent was {Book} released
-ReleaseIntent give me the release date of {Book}
-ReleaseIntent tell me the release date of {Book}
-ReleaseIntent the release date of {Book}
-ReleaseIntent release date of {Book}
-ReleaseIntent the {Book} release date
-ReleaseIntent give me {Book}'s release date
-ReleaseIntent tell me {Book}'s release date
-ReleaseIntent {Book} release date
-ReleaseIntent what is the release date
-ReleaseIntent what's the release date
-ReleaseIntent give me the release date
-ReleaseIntent tell me the release date
-ReleaseIntent the release date
-ReleaseIntent release date
-
-DirectIntent who directs {Book}
-DirectIntent who  is {Book} directed by
-DirectIntent by whom  is {Book} directed
-DirectIntent who are the directors of {Book}
-DirectIntent tell me who directed {Book}
-DirectIntent tell me who directs {Book}
-DirectIntent who directed {Book}
-DirectIntent who directs {Book}
-DirectIntent who are the directors
-DirectIntent give me the directors
-DirectIntent tell me the directors
-DirectIntent tell me who directed
-DirectIntent the directors
-DirectIntent directors
-DirectIntent the director
-DirectIntent director
-
-CastIntent who is in {Book}
-CastIntent who's in {Book}
-CastIntent who stars in {Book}
-CastIntent who is cast in {Book}
-CastIntent who's cast in {Book}
-CastIntent give me the stars
-CastIntent give me the cast
-CastIntent tell me the stars
-CastIntent tell me the cast
-CastIntent the stars
-CastIntent the cast
-CastIntent stars
-CastIntent cast
-
-GenreIntent what is the genre of {Book}
-GenreIntent what's the genre of {Book}
-GenreIntent the genre of {Book}
-GenreIntent what is {Book}'s genre
-GenreIntent what's {Book}'s genre
-GenreIntent {Book}'s genre
-GenreIntent {Book}'s type
-GenreIntent what type of book is {Book}
-GenreIntent what is the genre
-GenreIntent what's the genre
-GenreIntent give me the genre
-GenreIntent tell me the genre
-GenreIntent the genre
-GenreIntent genre
-
-LengthIntent what is the run time for {Book}
-LengthIntent what's the run time for {Book}
-LengthIntent the run time for {Book}
-LengthIntent what is the length of {Book}
-LengthIntent what's the length of {Book}
-LengthIntent the length of {Book}
-LengthIntent {Book} length
-LengthIntent {Book} run time
-LengthIntent length of {Book}
-LengthIntent how long is {Book}
-LengthIntent tell me how long is {Book}
-LengthIntent how long
-LengthIntent what's the run time
-LengthIntent what's the length
-LengthIntent the run time
-LengthIntent give me the run time
-LengthIntent tell me the run time
-LengthIntent give me the length
-LengthIntent tell me the length
-LengthIntent the length
-LengthIntent length
-LengthIntent run time
+RecommendedIntent is {Book} recommended
+RecommendedIntent tell me is {Book} recommended
+RecommendedIntent is {Book} recommended
+RecommendedIntent tell me if {Book} is recommended
+RecommendedIntent if {Book} is recommended
+RecommendedIntent if {Book} recommended
+RecommendedIntent tell me if {Book} is recommended
+RecommendedIntent tell me if recommended
+RecommendedIntent if {Book} is recommended
+RecommendedIntent if {Book} recommended
+RecommendedIntent is recommended
+RecommendedIntent tell me if it is recommended
+RecommendedIntent tell me if recommended
+RecommendedIntent is it recommended
+RecommendedIntent recommended
 
 RatingIntent what is the rating for {Book}
 RatingIntent what's the rating for {Book}
 RatingIntent give me the rating for {Book}
 RatingIntent tell me the rating for {Book}
-RatingIntent if {Book} is a n. c. seventeen rated book
-RatingIntent if {Book} is rated n. c. seventeen
-RatingIntent if {Book} is a r. rated book
-RatingIntent if {Book} is rated r.
-RatingIntent if {Book} is a p. g. thirteen rated book
-RatingIntent if {Book} is rated p. g. thirteen
-RatingIntent if {Book} is a p. g. rated book
-RatingIntent if {Book} is rated p. g.
-RatingIntent if {Book} is a g. rated book
-RatingIntent if {Book} is rated g.
-RatingIntent is {Book} a n. c. seventeen rated book
-RatingIntent is {Book} rated n. c. seventeen
-RatingIntent is {Book} a r. rated book
-RatingIntent is {Book} rated r.
-RatingIntent is {Book} a p. g. thirteen rated book
-RatingIntent is {Book} rated p. g. thirteen
-RatingIntent is {Book} a p. g. rated book
-RatingIntent is {Book} rated p. g.
-RatingIntent is {Book} a g. rated book
-RatingIntent is {Book} rated g.
-RatingIntent is this rated
 RatingIntent what is the rating
 RatingIntent what's the rating
 RatingIntent give me the rating
 RatingIntent tell me the rating
 RatingIntent the rating
-RatingIntent give me the m. p. a. a. rating
-RatingIntent tell me the m. p. a. a. rating
-RatingIntent the m. p. a. a. rating
-RatingIntent m. p. a. a. rating
 RatingIntent rating

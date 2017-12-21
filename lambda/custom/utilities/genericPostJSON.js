@@ -9,5 +9,6 @@ const fetchBaseOptions = {
   },
 };
 
-export default (endpoint, data, options) => fetch(endpoint, { body: JSON.stringify(data), ...fetchBaseOptions, ...options })
-  .then(response => response.json());
+export default (endpoint, data, options) =>
+  fetch(endpoint, { body: JSON.stringify(data), ...fetchBaseOptions, ...options })
+    .then(response => response.json());

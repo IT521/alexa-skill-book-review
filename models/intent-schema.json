@@ -1,102 +1,48 @@
 {
-	"intents": [{
-		"intent": "AMAZON.HelpIntent"
-	},
-	{
-		"intent": "AMAZON.StopIntent"
-	},
-	{
-		"intent": "AMAZON.CancelIntent"
-	},
-	{
-		"intent": "AboutIntent",
-		"slots": []
-	},
-	{
-		"intent": "ReviewIntent",
-		"slots": [{
-			"name": "Book",
-			"type": "AMAZON.Book"
-		},{
-			"name": "Author",
-			"type": "AMAZON.Author"
-		}]
-	},
-	{
-		"intent": "AgeRatingIntent",
-		"slots": [{
-			"name": "Book",
-			"type": "AMAZON.Book"
-		}]
-	},
-	{
-		"intent": "StarsIntent",
-		"slots": [{
-			"name": "Book",
-			"type": "AMAZON.Book"
-		}]
-	},
-	{
-		"intent": "GoodIntent",
-		"slots": [{
-			"name": "Book",
-			"type": "AMAZON.Book"
-		}]
-	},
-	{
-		"intent": "PointsIntent",
-		"slots": [{
-			"name": "Book",
-			"type": "AMAZON.Book"
-		}]
-	},
-	{
-		"intent": "DetailsIntent",
-		"slots": [{
-			"name": "Book",
-			"type": "AMAZON.Book"
-		}]
-	},
-	{
-		"intent": "ReleaseIntent",
-		"slots": [{
-			"name": "Book",
-			"type": "AMAZON.Book"
-		}]
-	},
-	{
-		"intent": "DirectIntent",
-		"slots": [{
-			"name": "Book",
-			"type": "AMAZON.Book"
-		}]
-	},
-	{
-		"intent": "CastIntent",
-		"slots": [{
-			"name": "Book",
-			"type": "AMAZON.Book"
-		}]
-	},
-	{
-		"intent": "GenreIntent",
-		"slots": [{
-			"name": "Book",
-			"type": "AMAZON.Book"
-		}]
-	},
-	{
-		"intent": "LengthIntent",
-		"slots": [{
-			"name": "Book",
-			"type": "AMAZON.Book"
-		}]
-	},
-	{
-		"intent": "RatingIntent",
-		"slots": [{
-			"name": "Book",
-			"type": "AMAZON.Book"
-		}]
-	}]
+  "intents": [
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AboutIntent",
+      "slots": []
+    },
+    {
+      "intent": "ReviewIntent",
+      "slots": [
+        {
+          "name": "Book",
+          "type": "AMAZON.Book"
+        },
+        {
+          "name": "Author",
+          "type": "AMAZON.Author"
+        }
+      ]
+    },
+    {
+      "intent": "RecommendedIntent",
+      "slots": [
+        {
+          "name": "Book",
+          "type": "AMAZON.Book"
+        }
+      ]
+    },
+    {
+      "intent": "RatingIntent",
+      "slots": [
+        {
+          "name": "Book",
+          "type": "AMAZON.Book"
+        }
+      ]
+    }
+  ]
 }

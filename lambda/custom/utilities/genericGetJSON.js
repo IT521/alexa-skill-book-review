@@ -15,7 +15,5 @@ export default (endpoint, data, options = {}) => {
   }
 
   return fetch(endpoint + (data ? `?${qs.stringify(data)}` : ''), { ...fetchBaseOptions, ...options })
-    .then(response => {
-		return response.json();
-	});
+    .then(response => response.json());
 };

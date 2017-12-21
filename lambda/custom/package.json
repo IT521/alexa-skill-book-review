@@ -1,28 +1,35 @@
 {
-	"name": "alexa-skill-book-review",
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:IT521/alexa-skill-book-review.git"
-	},
-	"version": "1.0.0",
-	"description": "Book Review Alexa Skill",
-	"main": "index.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"keywords": [
-		"alexa",
-		"skill",
-		"book",
-		"review"
-	],
-	"author": "KPG Softworks",
-	"license": "ISC",
-	"dependencies": {
-		"alexa-sdk": "^1.0.23",
-		"babel-register": "^6.26.0",
-		"isomorphic-fetch": "^2.2.1",
-		"promise": "^8.0.1",
-		"querystring": "^0.2.0"
-	}
+  "name": "alexa-skill-book-review",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:IT521/alexa-skill-book-review.git"
+  },
+  "version": "1.0.0",
+  "description": "Book Review Alexa Skill",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint app"
+  },
+  "keywords": [
+    "alexa",
+    "skill",
+    "book",
+    "review"
+  ],
+  "author": "KPG Softworks",
+  "license": "ISC",
+  "dependencies": {
+    "alexa-sdk": "^1.0.23",
+    "babel-register": "^6.26.0",
+    "isomorphic-fetch": "^2.2.1",
+    "number-to-words": "^1.2.3",
+    "promise": "^8.0.1",
+    "querystring": "^0.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0"
+  }
 }
