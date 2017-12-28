@@ -1,6 +1,8 @@
 import { toWords, toWordsOrdinal } from 'number-to-words';
-import genericGetJSON from './utilities/genericGetJSON';
+
 import config from './config';
+import genericGetJSON from './utilities/genericGetJSON';
+import logger from './utilities/logger';
 
 const bookReview = {
   reviewCount: 0,
@@ -20,6 +22,20 @@ const iDreamBooksParams = {
 };
 
 // Helper Functions ===============================================================================
+
+/**
+ * getReviews()
+ * @param {string} title - The title of the book to lookup.
+ * @param {string} author - The author name of the book to lookup.
+ */
+function getReviews(title, author) {
+  return genericGetJSON(config.idreambooksApi, {
+    ...iDreamBooksParams,
+    ...{
+      q: title + (author ? (` by ${author}`) : '')
+    }
+  });
+}
 
 /**
  * toDecimalWord()
@@ -55,27 +71,17 @@ function toMonthWord(month) {
 }
 
 /**
- * getReviews()
- * @param {string} title - The title of the book to lookup.
- * @param {string} author - The author name of the book to lookup.
- */
-function getReviews(title, author) {
-  return genericGetJSON(config.idreambooksApi, {
-    ...iDreamBooksParams,
-    ...{
-      q: title + (author ? (` by ${author}`) : '')
-    }
-  });
-}
-
-/**
- * getDate()
+ * toDateWords()
  * @param {string} reviewDate - Date.
  */
-function getDate(reviewDate) {
+function toDateWords(reviewDate) {
   const currentDate = new Date(reviewDate);
-
-  return `${toMonthWord(currentDate.getMonth())} ${toWordsOrdinal(currentDate.getDate())} ${toWords(currentDate.getFullYear())}`;
+  const dateWords = [
+    toMonthWord(currentDate.getMonth()),
+    toWordsOrdinal(currentDate.getDate()),
+    toWords(currentDate.getFullYear())
+  ];
+  return dateWords.join(' ');
 }
 
 /**
@@ -96,7 +102,7 @@ function formatReview(review, index) {
     formattedReview.push(`has a ${posNeg} review`);
   }
   if (reviewDate) {
-    formattedReview.push(`given on ${getDate(reviewDate)}`);
+    formattedReview.push(`given on ${toDateWords(reviewDate)}`);
   }
   if (source) {
     formattedReview.push(`by ${source}`);
@@ -146,10 +152,8 @@ const handlers = {
   ReviewIntent: () => {
     const title = this.request.slot('Book');
     const author = this.request.slot('Author');
-    const notFound = `${title} was not found`;
-    let endSesion = false;
 
-    alexaResponse.speakMsg = getReviews(title, author)
+    getReviews(title, author)
       .then((reviews) => {
         const { 'review-count': reviewCount = 0, rating = 0, 'critic-reviews': criticReviews = [] } = reviews;
         bookReview.reviewCount = reviewCount;
@@ -157,25 +161,31 @@ const handlers = {
         bookReview.rating = rating;
         bookReview.criticReviews = criticReviews.slice();
         bookReview.consolidatedReview = getConsolidatedReview(title, bookReview.criticReviews);
-        return bookReview.consolidatedReview;
+
+        alexaResponse.speakMsg = bookReview.consolidatedReview;
+        alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
+        this.emit('SpeakResponse');
       })
-      .catch(() => {
-        endSesion = true;
-        return notFound;
+      .catch((error) => {
+        const notFound = `${title} was not found`;
+        logger.error(notFound, error);
+
+        alexaResponse.speakMsg = notFound;
+        alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
+        this.emit('SpeakResponse').emit('SessionEndedRequest');
       });
-    alexaResponse.cardRendererMsg = endSesion ? notFound : 'Reviews';
-    this.emit('SpeakResponse');
   },
   RecommendedIntent: () => {
     const title = this.request.slot('Book');
-    alexaResponse.speakMsg = (bookReview.rating >= config.minimumRating) ? `${title} is recommended by critics` : `${title} is not recommended by critics`;
-    alexaResponse.cardRendererMsg = (bookReview.rating >= config.minimumRating) ? 'Recommended by Critics' : 'Not Recommended by Critics';
+    alexaResponse.speakMsg = (bookReview.rating >= config.minimumRating) ?
+      `${title} is recommended by critics` : `${title} is not recommended by critics`;
+    alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
     this.emit('SpeakResponse');
   },
   RatingIntent: () => {
     const title = this.request.slot('Book');
     alexaResponse.speakMsg = `The rating for ${title} is ${toDecimalWord(bookReview.rating)} percent`;
-    alexaResponse.cardRendererMsg = 'Rating';
+    alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
     this.emit('SpeakResponse');
   },
   SpeakResponse: () => {
