@@ -1,9 +1,22 @@
-import { toWords, toWordsOrdinal } from 'number-to-words';
+/* eslint-disable */
+process.env.PATH += ':' + process.env.LAMBDA_TASK_ROOT;
 
-import config from './config';
-import genericGetJSON from './utilities/genericGetJSON';
-import logger from './utilities/logger';
+const Alexa = require('alexa-sdk');
+const { toWords, toWordsOrdinal } = require('number-to-words');
 
+const config = require('./config');
+const genericGetJSON = require('./utilities/genericGetJSON');
+
+const languageStrings = {
+  'en-US': {
+    translation: {
+      WELCOME: config.welcomeText,
+      HELP: config.helpText.join(' '),
+      ABOUT: config.aboutText.join(' '),
+      STOP: config.stopText
+    }
+  }
+};
 const bookReview = {
   reviewCount: 0,
   rating: 0,
@@ -19,6 +32,93 @@ const alexaResponse = {
 const iDreamBooksParams = {
   key: config.idreambooksApiKey,
   q: ''
+};
+
+// eslint-disable-next-line func-names
+exports.handler = function (event, context, callback) {
+  console.log(`${config.skillName} Alexa Application ID: ${config.appId}`);
+  const alexa = Alexa.handler(event, context);
+
+  alexa.appId = config.appId;
+  alexa.resources = languageStrings;
+  alexa.registerHandlers(handlers);
+  alexa.execute();
+  callback(null, `Alexa Application ID: ${config.appId}`);
+};
+
+// Handler Functions ===============================================================================
+
+const handlers = {
+  LaunchRequest: function () {
+    const say = `${this.t('WELCOME')} ${this.t('HELP')}`;
+    this.response.speak(say).listen(say);
+    this.emit(':responseReady');
+  },
+
+  AboutIntent: function () {
+    this.response.speak(this.t('ABOUT'));
+    this.emit(':responseReady');
+  },
+  ReviewIntent: function () {
+    const title = this.request.slot('Book');
+    const author = this.request.slot('Author');
+
+    getReviews(title, author)
+      .then((reviews) => {
+        const { 'review-count': reviewCount = 0, rating = 0, 'critic-reviews': criticReviews = [] } = reviews;
+        bookReview.reviewCount = reviewCount;
+        // A 'rating' is not calculated if the 'review-count' is less than 5.0.
+        bookReview.rating = rating;
+        bookReview.criticReviews = criticReviews.slice();
+        bookReview.consolidatedReview = getConsolidatedReview(title, bookReview.criticReviews);
+
+        alexaResponse.speakMsg = bookReview.consolidatedReview;
+        alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
+        this.emit('SpeakResponse');
+      })
+      .catch((error) => {
+        const notFound = `${title} was not found`;
+        logger.error(notFound, error);
+
+        alexaResponse.speakMsg = notFound;
+        alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
+        this.emit('SpeakResponse').emit('SessionEndedRequest');
+      });
+  },
+  RecommendedIntent: function () {
+    const title = this.request.slot('Book');
+    alexaResponse.speakMsg = (bookReview.rating >= config.minimumRating) ?
+      `${title} is recommended by critics` : `${title} is not recommended by critics`;
+    alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
+    this.emit('SpeakResponse');
+  },
+  RatingIntent: function () {
+    const title = this.request.slot('Book');
+    alexaResponse.speakMsg = `The rating for ${title} is ${toDecimalWord(bookReview.rating)} percent`;
+    alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
+    this.emit('SpeakResponse');
+  },
+  SpeakResponse: function () {
+    this.response.speak(alexaResponse.speakMsg)
+      .cardRenderer(config.skillName, alexaResponse.cardRendererMsg).listen(alexaResponse.speakMsg);
+    this.emit(':responseReady');
+  },
+
+  'AMAZON.HelpIntent': function () {
+    this.response.speak(this.t('HELP')).listen(this.t('HELP'));
+    this.emit(':responseReady');
+  },
+  'AMAZON.CancelIntent': function () {
+    this.response.speak(this.t('STOP'));
+    this.emit(':responseReady');
+  },
+  'AMAZON.StopIntent': function () {
+    this.emit('SessionEndedRequest');
+  },
+  SessionEndedRequest: function () {
+    this.response.speak(this.t('STOP'));
+    this.emit(':responseReady');
+  }
 };
 
 // Helper Functions ===============================================================================
@@ -137,78 +237,3 @@ function getConsolidatedReview(title, reviews) {
   }
   return consolidatedReview.join(' ').trim();
 }
-
-const handlers = {
-  LaunchRequest: () => {
-    const say = `${this.t('WELCOME')} ${this.t('HELP')}`;
-    this.response.speak(say).listen(say);
-    this.emit(':responseReady');
-  },
-
-  AboutIntent: () => {
-    this.response.speak(this.t('ABOUT'));
-    this.emit(':responseReady');
-  },
-  ReviewIntent: () => {
-    const title = this.request.slot('Book');
-    const author = this.request.slot('Author');
-
-    getReviews(title, author)
-      .then((reviews) => {
-        const { 'review-count': reviewCount = 0, rating = 0, 'critic-reviews': criticReviews = [] } = reviews;
-        bookReview.reviewCount = reviewCount;
-        // A 'rating' is not calculated if the 'review-count' is less than 5.0.
-        bookReview.rating = rating;
-        bookReview.criticReviews = criticReviews.slice();
-        bookReview.consolidatedReview = getConsolidatedReview(title, bookReview.criticReviews);
-
-        alexaResponse.speakMsg = bookReview.consolidatedReview;
-        alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
-        this.emit('SpeakResponse');
-      })
-      .catch((error) => {
-        const notFound = `${title} was not found`;
-        logger.error(notFound, error);
-
-        alexaResponse.speakMsg = notFound;
-        alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
-        this.emit('SpeakResponse').emit('SessionEndedRequest');
-      });
-  },
-  RecommendedIntent: () => {
-    const title = this.request.slot('Book');
-    alexaResponse.speakMsg = (bookReview.rating >= config.minimumRating) ?
-      `${title} is recommended by critics` : `${title} is not recommended by critics`;
-    alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
-    this.emit('SpeakResponse');
-  },
-  RatingIntent: () => {
-    const title = this.request.slot('Book');
-    alexaResponse.speakMsg = `The rating for ${title} is ${toDecimalWord(bookReview.rating)} percent`;
-    alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
-    this.emit('SpeakResponse');
-  },
-  SpeakResponse: () => {
-    this.response.speak(alexaResponse.speakMsg)
-      .cardRenderer(config.skillName, alexaResponse.cardRendererMsg).listen(alexaResponse.speakMsg);
-    this.emit(':responseReady');
-  },
-
-  'AMAZON.HelpIntent': () => {
-    this.response.speak(this.t('HELP')).listen(this.t('HELP'));
-    this.emit(':responseReady');
-  },
-  'AMAZON.CancelIntent': () => {
-    this.response.speak(this.t('STOP'));
-    this.emit(':responseReady');
-  },
-  'AMAZON.StopIntent': () => {
-    this.emit('SessionEndedRequest');
-  },
-  SessionEndedRequest: () => {
-    this.response.speak(this.t('STOP'));
-    this.emit(':responseReady');
-  }
-};
-
-export default handlers;
