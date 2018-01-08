@@ -6,6 +6,6 @@ const fetchBaseOptions = {
   // credentials: 'same-origin',
 };
 
-export default (endpoint, data, options = {}) =>
+module.exports = (endpoint, data, options = {}) =>
   fetch(endpoint + (data ? `?${qs.stringify(data)}` : ''), { ...fetchBaseOptions, ...options })
     .then(response => response.json());

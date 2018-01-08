@@ -1,5 +1,4 @@
-/* eslint-disable */
-process.env.PATH += ':' + process.env.LAMBDA_TASK_ROOT;
+process.env.PATH += `:${process.env.LAMBDA_TASK_ROOT}`;
 
 const Alexa = require('alexa-sdk');
 const { toWords, toWordsOrdinal } = require('number-to-words');
@@ -36,11 +35,13 @@ const iDreamBooksParams = {
 
 // eslint-disable-next-line func-names
 exports.handler = function (event, context, callback) {
+  // eslint-disable-next-line no-console
   console.log(`${config.skillName} Alexa Application ID: ${config.appId}`);
   const alexa = Alexa.handler(event, context);
 
   alexa.appId = config.appId;
   alexa.resources = languageStrings;
+  // eslint-disable-next-line no-use-before-define
   alexa.registerHandlers(handlers);
   alexa.execute();
   callback(null, `Alexa Application ID: ${config.appId}`);
@@ -49,20 +50,24 @@ exports.handler = function (event, context, callback) {
 // Handler Functions ===============================================================================
 
 const handlers = {
+  // eslint-disable-next-line func-names, object-shorthand
   LaunchRequest: function () {
     const say = `${this.t('WELCOME')} ${this.t('HELP')}`;
     this.response.speak(say).listen(say);
     this.emit(':responseReady');
   },
 
+  // eslint-disable-next-line func-names, object-shorthand
   AboutIntent: function () {
     this.response.speak(this.t('ABOUT'));
     this.emit(':responseReady');
   },
+  // eslint-disable-next-line func-names, object-shorthand
   ReviewIntent: function () {
     const title = this.request.slot('Book');
     const author = this.request.slot('Author');
 
+    // eslint-disable-next-line no-use-before-define
     getReviews(title, author)
       .then((reviews) => {
         const { 'review-count': reviewCount = 0, rating = 0, 'critic-reviews': criticReviews = [] } = reviews;
@@ -70,6 +75,7 @@ const handlers = {
         // A 'rating' is not calculated if the 'review-count' is less than 5.0.
         bookReview.rating = rating;
         bookReview.criticReviews = criticReviews.slice();
+        // eslint-disable-next-line no-use-before-define
         bookReview.consolidatedReview = getConsolidatedReview(title, bookReview.criticReviews);
 
         alexaResponse.speakMsg = bookReview.consolidatedReview;
@@ -78,13 +84,15 @@ const handlers = {
       })
       .catch((error) => {
         const notFound = `${title} was not found`;
-        logger.error(notFound, error);
+        // eslint-disable-next-line no-console
+        console.log(notFound, error);
 
         alexaResponse.speakMsg = notFound;
         alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
         this.emit('SpeakResponse').emit('SessionEndedRequest');
       });
   },
+  // eslint-disable-next-line func-names, object-shorthand
   RecommendedIntent: function () {
     const title = this.request.slot('Book');
     alexaResponse.speakMsg = (bookReview.rating >= config.minimumRating) ?
@@ -92,29 +100,36 @@ const handlers = {
     alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
     this.emit('SpeakResponse');
   },
+  // eslint-disable-next-line func-names, object-shorthand
   RatingIntent: function () {
     const title = this.request.slot('Book');
+    // eslint-disable-next-line no-use-before-define
     alexaResponse.speakMsg = `The rating for ${title} is ${toDecimalWord(bookReview.rating)} percent`;
     alexaResponse.cardRendererMsg = alexaResponse.speakMsg;
     this.emit('SpeakResponse');
   },
+  // eslint-disable-next-line func-names, object-shorthand
   SpeakResponse: function () {
     this.response.speak(alexaResponse.speakMsg)
       .cardRenderer(config.skillName, alexaResponse.cardRendererMsg).listen(alexaResponse.speakMsg);
     this.emit(':responseReady');
   },
 
+  // eslint-disable-next-line func-names
   'AMAZON.HelpIntent': function () {
     this.response.speak(this.t('HELP')).listen(this.t('HELP'));
     this.emit(':responseReady');
   },
+  // eslint-disable-next-line func-names
   'AMAZON.CancelIntent': function () {
     this.response.speak(this.t('STOP'));
     this.emit(':responseReady');
   },
+  // eslint-disable-next-line func-names
   'AMAZON.StopIntent': function () {
     this.emit('SessionEndedRequest');
   },
+  // eslint-disable-next-line func-names, object-shorthand
   SessionEndedRequest: function () {
     this.response.speak(this.t('STOP'));
     this.emit(':responseReady');
